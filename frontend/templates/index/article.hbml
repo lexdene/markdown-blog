@@ -1,0 +1,4 @@
+= include_style('index/article')
+%h1 test hbml
+%div
+  = markdown_content
