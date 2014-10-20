@@ -1,4 +1,4 @@
-STYLE_COMPILER = scss
+STYLE_COMPILER = sass
 SCRIPT_COMPILER = coffee -b -c -o
 MIN_SCRIPT_COMPILER = uglifyjs -o
 MKDIR = mkdir -p
@@ -7,17 +7,17 @@ MKDIR = mkdir -p
 SOURCE_DIR = .
 TARGET_DIR = ../data/compiled
 
-# dir for scss
-STYLE_SOURCE_DIR = $(SOURCE_DIR)/scss
+# dir for sass
+STYLE_SOURCE_DIR = $(SOURCE_DIR)/sass
 STYLE_TARGET_DIR = $(TARGET_DIR)/css
 
 # dir for coffee script
 SCRIPT_SOURCE_DIR = $(SOURCE_DIR)/coffee
 SCRIPT_TARGET_DIR = $(TARGET_DIR)/js
 
-# scss file list
-STYLE_SOURCES = $(shell find $(STYLE_SOURCE_DIR) -name '*.scss')
-STYLE_TARGETS = $(patsubst $(STYLE_SOURCE_DIR)/%.scss, $(STYLE_TARGET_DIR)/%.css, $(STYLE_SOURCES))
+# sass file list
+STYLE_SOURCES = $(shell find $(STYLE_SOURCE_DIR) -name '*.sass')
+STYLE_TARGETS = $(patsubst $(STYLE_SOURCE_DIR)/%.sass, $(STYLE_TARGET_DIR)/%.css, $(STYLE_SOURCES))
 
 # coffee script file list
 SCRIPT_SOURCES = $(shell find $(SCRIPT_SOURCE_DIR) -name '*.coffee')
@@ -29,7 +29,7 @@ TARGETS = $(STYLE_TARGETS) $(SCRIPT_TARGETS) $(SCRIPT_COMPRESSED_TARGETS)
 first : all
 
 # compile for files
-$(STYLE_TARGET_DIR)/%.css : $(STYLE_SOURCE_DIR)/%.scss Makefile
+$(STYLE_TARGET_DIR)/%.css : $(STYLE_SOURCE_DIR)/%.sass Makefile
 	$(STYLE_COMPILER) "$<" "$@"
 
 $(SCRIPT_TARGET_DIR)/%.js : $(SCRIPT_SOURCE_DIR)/%.coffee Makefile

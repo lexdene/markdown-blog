@@ -1,4 +1,10 @@
-= include_style('index/article')
-%h1 test hbml
-%div
-  = markdown_content
+%html
+  %head
+    %title
+      = title
+    = include_style('index/article')
+    %meta(name="viewport", content="width=device-width, initial-scale=1")/
+
+  %body
+    %div.markdown-content
+      = markdown_content

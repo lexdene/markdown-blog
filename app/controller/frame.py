@@ -13,6 +13,18 @@ def default_frame(func):
     )
 
     def controller_func(request):
+        def include_style(path):
+            return hbml.compile(
+                '%link(href=path, rel="stylesheet", type="text/css")/',
+                dict(
+                    path = os.path.join(
+                        request.root_path(),
+                        'data/compiled/css',
+                        path + '.css'
+                    )
+                )
+            )
+
         var_dict = func(request)
         var_dict.update({
             'include_style': include_style
@@ -33,13 +45,3 @@ def default_frame(func):
     return controller_func
 
 
-def include_style(path):
-    return hbml.compile(
-        '%link(href=path, rel="stylesheet", type="text/css")/',
-        dict(
-            path = os.path.join(
-                '/data/compiled/css',
-                path + '.css'
-            )
-        )
-    )

@@ -15,25 +15,20 @@ def index(request):
 
 @frame.default_frame
 def article(request):
-    path = request.params['path']
+    path = os.path.normpath(os.path.join(
+        request.app.root_dir,
+        '../../../write/md-blog',
+        request.params['path']
+    ))
 
     buffer = io.BytesIO()
+    markdown.markdownFromFile(path, buffer)
 
-    markdown.markdownFromFile(
-        os.path.normpath(os.path.join(
-            request.app.root_dir,
-            '../../write/md-blog',
-            path + '.md'
-        )),
-        buffer
-    )
+    title = ''
+    with open(path, 'r', encoding='utf-8') as f:
+        title = f.readline()[2:]
 
     return {
+        'title': title,
         'markdown_content': buffer.getvalue().decode('utf-8')
     }
-    return drape.response.Response(
-        'hello:<br />%s<br />%s' % (
-            path,
-            buffer.getvalue().decode("utf-8")
-        )
-    )
