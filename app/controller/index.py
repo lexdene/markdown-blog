@@ -26,7 +26,7 @@ def article(request):
 
     title = ''
     with open(path, 'r', encoding='utf-8') as f:
-        title = f.readline()[2:]
+        title = f.readline()[2:-1]
 
     return {
         'title': title,
