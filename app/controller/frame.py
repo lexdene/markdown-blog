@@ -18,6 +18,7 @@ def default_frame(func):
                 '%link(href=path, rel="stylesheet", type="text/css")/',
                 dict(
                     path = os.path.join(
+                        '/',
                         request.root_path(),
                         'data/compiled/css',
                         path + '.css'
