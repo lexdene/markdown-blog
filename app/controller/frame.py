@@ -3,6 +3,32 @@ import hbml
 
 import drape
 
+
+class HelperWrapper:
+    def __init__(self, request):
+        self.__request = request
+
+    def include_style(self, path):
+        return hbml.compile(
+            '%link(href=path, rel="stylesheet", type="text/css")/',
+            dict(
+                path=os.path.join(
+                    '/',
+                    self.__request.root_path(),
+                    'data/compiled/css',
+                    path + '.css'
+                )
+            )
+        )
+
+    def helpers(self):
+        return [
+            (attr_name, getattr(self, attr_name))
+            for attr_name in dir(self)
+            if attr_name[0] != '_' and attr_name != 'helpers'
+        ]
+
+
 def default_frame(func):
     prefix = 'app.controller.'
     assert prefix == func.__module__[:len(prefix)]
@@ -13,23 +39,11 @@ def default_frame(func):
     )
 
     def controller_func(request):
-        def include_style(path):
-            return hbml.compile(
-                '%link(href=path, rel="stylesheet", type="text/css")/',
-                dict(
-                    path = os.path.join(
-                        '/',
-                        request.root_path(),
-                        'data/compiled/css',
-                        path + '.css'
-                    )
-                )
-            )
-
         var_dict = func(request)
-        var_dict.update({
-            'include_style': include_style
-        })
+
+        helper = HelperWrapper(request)
+        var_dict.update(helper.helpers())
+
         return drape.response.Response(
             hbml.compile_file(
                 os.path.normpath(
@@ -44,5 +58,3 @@ def default_frame(func):
         )
 
     return controller_func
-
-
