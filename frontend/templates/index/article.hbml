@@ -2,9 +2,17 @@
   %head
     %title
       = title
-    = include_style('index/article')
+    = include_style()
     %meta(name="viewport", content="width=device-width, initial-scale=1")/
 
   %body
     %div.markdown-content
       = markdown_content
+    .bottom-area
+      %a(href = path_to('article/catalog.md'))
+        目录
+      %a.btn-idontknow(href = '#')
+        啦啦啦
+
+    = include_lib_script('jquery/2.0.3/jquery-2.0.3.min.js')
+    = include_script()
