@@ -1,7 +1,7 @@
 %html
   %head
     %title
-      = title
+      = title + ' | 大象的blog'
     = include_style()
     %meta(name="viewport", content="width=device-width, initial-scale=1")/
 
@@ -11,6 +11,8 @@
     .bottom-area
       %a(href = path_to('article/catalog.md'))
         目录
+      %a(href = path_to('about'))
+        关于本站
       %a.btn-idontknow(href = '#')
         啦啦啦
 

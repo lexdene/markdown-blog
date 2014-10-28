@@ -12,4 +12,5 @@ define_controller(controller)
 define_routes(
     Url.get('', 'index.index'),
     Url.get('article/(?P<path>.+)', 'index.article'),
+    Url.get('about', 'index.about'),
 )

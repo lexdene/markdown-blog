@@ -45,7 +45,7 @@ class HelperWrapper:
         return hbml.compile(
             '%script(src=path)',
             dict(
-                path = os.path.join(
+                path=os.path.join(
                     drape.config.config.LIB_ROOT,
                     path
                 )

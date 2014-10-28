@@ -15,11 +15,17 @@ def index(request):
 
 @frame.default_frame
 def article(request):
-    path = os.path.normpath(os.path.join(
-        request.app.root_dir,
-        '../../../write/md-blog',
-        request.params['path']
-    ))
+    if 'path' in request.params:
+        path = os.path.normpath(os.path.join(
+            request.app.root_dir,
+            '../../../write/md-blog',
+            request.params['path']
+        ))
+    else:
+        path = os.path.normpath(os.path.join(
+            request.app.root_dir,
+            request.params['inner_path']
+        ))
 
     buffer = io.BytesIO()
     markdown.markdownFromFile(path, buffer)
@@ -32,3 +38,11 @@ def article(request):
         'title': title,
         'markdown_content': buffer.getvalue().decode('utf-8')
     }
+
+
+def about(request):
+    request.params.update({
+        'inner_path': 'frontend/markdown/about.md'
+    })
+
+    return article(request)
