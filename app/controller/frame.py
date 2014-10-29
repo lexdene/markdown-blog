@@ -13,14 +13,14 @@ class HelperWrapper:
         if path is None:
             path = self.__path
 
+        path = 'css/%s.css' % path
+        resource_info = self._get_resource_info(path)
+
         return hbml.compile(
             '%link(href=path, rel="stylesheet", type="text/css")/',
             dict(
-                path=os.path.join(
-                    '/',
-                    self.__request.root_path(),
-                    'data/compiled/css',
-                    path + '.css'
+                path='%s?v=%s' % (
+                    resource_info[0], resource_info[1]
                 )
             )
         )
@@ -29,14 +29,18 @@ class HelperWrapper:
         if path is None:
             path = self.__path
 
+        if drape.config.config.FRONTEND_DEBUG:
+            path = 'js/%s.js' % path
+        else:
+            path = 'js/%s.min.js' % path
+
+        resource_info = self._get_resource_info(path)
+
         return hbml.compile(
             '%script(src=path)',
             dict(
-                path=os.path.join(
-                    '/',
-                    self.__request.root_path(),
-                    'data/compiled/js',
-                    path + '.js'
+                path='%s?v=%s' % (
+                    resource_info[0], resource_info[1]
                 )
             )
         )
@@ -58,6 +62,23 @@ class HelperWrapper:
             self.__request.root_path(),
             path
         )
+
+    def _get_resource_info(self, path):
+        'return a (url, version_tag, path) tuple'
+        url = os.path.join(
+            '/',
+            self.__request.root_path(),
+            drape.config.config.RESOURCE_URL_ROOT,
+            path
+        )
+        file_path = os.path.join(
+            self.__request.app.root_dir,
+            drape.config.config.RESOURCE_PATH_ROOT,
+            path
+        )
+        version_tag = os.path.getmtime(file_path)
+
+        return (url, version_tag, file_path)
 
     def _helpers(self):
         return [
